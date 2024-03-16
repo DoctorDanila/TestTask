@@ -12,6 +12,20 @@ class UserController extends BaseAPIController
 {
     public $modelClass = \app\modules\v1\models\Users::class;
 
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        return $behaviors;
+    }
+
+    public function actionLogin() {
+        if (!\Yii::$app->user->isGuest) {
+            throw new BadRequestHttpException();
+        }
+
+        if ($user = Users::findByUsername(Yii::$app->request->post('username')) and $user->validatePassword(Yii::$app->request->post('password_hash'))) {
+            return $user->access_token;
+        }
 
 
 
