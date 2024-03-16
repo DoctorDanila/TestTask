@@ -28,4 +28,33 @@ class Module extends \yii\base\Module
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     }
 
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => CompositeAuth::class,
+            'authMethods' => [
+                HttpBearerAuth::className(),
+                [
+                    'class' => QueryParamAuth::className(),
+                    'tokenParam' => 'token',
+                ],
+                [
+                    'class' => HttpBasicAuth::className(),
+                    'auth' => function ($username, $password) {
+                        if ($user = Users::find()->where(['username' => $username])->one() and $user->validatePassword($password)) {
+                            return $user;
+                        }
+                        return null;
+                    },
+                ]
+            ],
+            'except'=> [
+                'user/login',
+                'user/create'
+            ],
+        ];
+//        $behaviors['rateLimiter']['enableRateLimitHeaders'] = false;
+        return $behaviors;
+    }
 }
