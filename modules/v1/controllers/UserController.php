@@ -14,4 +14,20 @@ class UserController extends BaseAPIController
 
 
 
+
+    public function actions(){
+        $actions = parent::actions();
+        unset($actions['index']);
+        return $actions;
+    }
+    public function actionIndex(){
+        $activeData = new ActiveDataProvider([
+            'query' => Users::find(),
+            'pagination' => [
+                'defaultPageSize' => \Yii::$app->request->get('limit', 20),
+                'pageSizeLimit' => [1, 500],
+            ],
+        ]);
+        return $activeData;
+    }
 }
