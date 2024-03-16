@@ -27,7 +27,17 @@ class UserController extends BaseAPIController
             return $user->access_token;
         }
 
+        return null;
+    }
 
+    public function actionCreate() {
+        if (!\Yii::$app->user->isGuest) {
+            throw new BadRequestHttpException();
+        }
+        $model = new Users(['scenario' => 'create']);
+
+        return $model->load(Yii::$app->request->post()) && $model->save() ? $model->access_token : null;
+    }
 
     public function actions(){
         $actions = parent::actions();
