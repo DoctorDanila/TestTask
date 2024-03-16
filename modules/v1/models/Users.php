@@ -33,6 +33,12 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface//, RateLim
     /**
      * {@inheritdoc}
      */
+    public function fields()
+    {
+        $fields = parent::fields();
+        unset($fields['password_reset_token'],$fields['password_hash'],$fields['created_at'],$fields['updated_at'],$fields['access_token'], $fields['auth_key']);
+        return $fields;
+    }
 
     /**
      * {@inheritdoc}
