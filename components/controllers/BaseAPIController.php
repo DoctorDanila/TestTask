@@ -12,5 +12,10 @@ class BaseAPIController extends ActiveController
         'collectionEnvelope'=>'items',
     ];
 
+    public function checkAccess($action, $model = null, $params = [])
+    {
+//        parent::checkAccess($action, $model, $params);
+        return true;
+    }
 
 }
