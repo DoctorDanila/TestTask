@@ -18,4 +18,17 @@ class BaseAPIController extends ActiveController
         return true;
     }
 
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['contentNegotiator'] = [
+            'class'=>\yii\filters\ContentNegotiator::class,
+            'formatParam'=>'_format',
+            'formats'=> [
+                'application/json'=>\yii\web\Response::FORMAT_JSON,
+                'xml'=>\yii\web\Response::FORMAT_XML,
+            ],
+        ];
+        return $behaviors;
+    }
 }
